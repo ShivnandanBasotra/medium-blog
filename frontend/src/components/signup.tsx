@@ -19,7 +19,9 @@ export default function SignupPage() {
   async function handleSignup(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     try {
-      const response = await axios.post(`${backendUrl}/api/v1/user/signup`, authInputs);
+      const response = await axios.post(`${backendUrl}/api/v1/user/signup`, authInputs, {
+        withCredentials: true
+      });
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setUser(response.data.user);
     } catch (error) {

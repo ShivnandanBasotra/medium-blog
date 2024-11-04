@@ -13,10 +13,27 @@ export default function SigninPage() {
     password: '',
   })
   const setUser = useSetRecoilState(user);
+  // async function handleSignin (e: React.MouseEvent<HTMLButtonElement>){
+  //   e.preventDefault();
+  //    try {
+  //     const response = await axios.post(`${backendUrl}/api/v1/user/signin`,authInputs);
+  //     localStorage.setItem('user', JSON.stringify(response.data.user));
+  //     setUser(response.data.user);
+  //    } catch (error) {
+  //     if (axios.isAxiosError(error)) {
+  //       console.log('Error:', error.response?.data || error.message);
+  //     } else {
+  //       console.log('An unexpected error occurred:', error);
+  //     }
+  //    }
+  // }
+
   async function handleSignin (e: React.MouseEvent<HTMLButtonElement>){
     e.preventDefault();
      try {
-      const response = await axios.post(`${backendUrl}/api/v1/user/signin`,authInputs);
+      const response = await axios.post(`${backendUrl}/api/v1/user/signin`, authInputs, {
+        withCredentials: true
+      });
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setUser(response.data.user);
      } catch (error) {
