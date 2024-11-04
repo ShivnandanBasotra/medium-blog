@@ -1,0 +1,1 @@
+export const backendUrl = 'https://backend.flashbacksnaps9.workers.dev'
