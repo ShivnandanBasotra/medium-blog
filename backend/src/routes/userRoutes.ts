@@ -39,19 +39,11 @@ userRouter.post('/signup', async (c) => {
       }
     })
     const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
-    // setCookie(c, 'jwt', jwt/* , {
-    //   httpOnly: true,
-    //   // secure: true,    
-    //   // maxAge: 60 * 60 * 24 * 7 
-    // } */)
-    setCookie(c, 'jwt', jwt, {
+    setCookie(c, 'jwt', jwt/* , {
       httpOnly: true,
-      secure: false, 
-      maxAge: 60 * 60 * 24 * 7,
-      sameSite: 'lax', 
-      path: '/',
-      domain: 'localhost' 
-    })
+      // secure: true,    
+      // maxAge: 60 * 60 * 24 * 7 
+    } */)
     return c.json({ message: "user created successfully", user, jwt }, 201);
   } catch (error) {
     console.log(error);
@@ -60,35 +52,6 @@ userRouter.post('/signup', async (c) => {
     })
   }
 })
-
-// userRouter.post('/signin', async (c) => {
-//   const { email, password } = await c.req.json();
-//   const prisma = new PrismaClient({
-//     datasourceUrl: c.env.DATABASE_URL,
-//   }).$extends(withAccelerate())
-//   try {
-//     const user = await prisma.user.findFirst({
-//       where: {
-//         email,
-//         password
-//       }
-//     })
-//     if (!user) return c.json({ error: "user do not exists" }, 409);
-
-//     const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
-//     setCookie(c, 'jwt', jwt/* , {
-//       httpOnly: true,
-//       // secure: true,    
-//       // maxAge: 60 * 60 * 24 * 7
-//     } */)
-//     return c.json({ message: "user signed in successfully", user, jwt }, 201);
-//   } catch (error) {
-//     console.log(error);
-//     return c.json({
-//       message: "error in signin route"
-//     })
-//   }
-// })
 
 userRouter.post('/signin', async (c) => {
   const { email, password } = await c.req.json();

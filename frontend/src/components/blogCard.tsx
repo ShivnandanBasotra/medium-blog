@@ -4,18 +4,19 @@ import user from "../atoms/user"
 
 interface BlogCard {
     fullName: string,
+    id: string,
     date: string,
     title: string,
     content: string
 }
 
-export function BlogCard({ fullName, date, title, content }: BlogCard) {
+export function BlogCard({id, fullName, date, title, content }: BlogCard) {
     const loggedinUser = useRecoilValue(user);
-    let userName = JSON.parse(loggedinUser||"").name
+     const userName = loggedinUser? loggedinUser.name : "";
     return (
         <div className="border-b-2">
             <div className="flex items-center py-3">
-                <Avatar name={userName||"U"}/>
+                <Avatar name={userName}/>
                 <div className="font-medium pl-2 text-slate-600">{fullName}</div>
                 <div className="h-1 w-1 bg-slate-600 rounded-full m-2"></div>
                 <div className="text-slate-400">{date}</div>

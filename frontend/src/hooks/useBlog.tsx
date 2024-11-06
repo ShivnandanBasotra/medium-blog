@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { backendUrl } from "../../config";
+import { useParams } from "react-router-dom";
 
 interface Blog {
     id: string,
@@ -11,21 +12,23 @@ interface Blog {
     }
 }
 
-export function useBlogs () {
+export function useBlog () {
+    const {id} = useParams();
     const [loading, setLoading] = useState(false);
-    const [blogs, setBlogs] = useState<Blog[]>([]);
+    const [blog, setBlog] = useState<Blog>();
     const jwt = localStorage.getItem('jwt');
     useEffect(()=>{
+        console.log(id);
         setLoading(true)
-        axios.get(`${backendUrl}/api/v1/blog/bulk`,{headers: {
+        axios.get(`${backendUrl}/api/v1/blog/blog/${id}`,{headers: {
             'Authorization': `Bearer ${jwt}`, 
         },withCredentials: true})
         .then(response=>{
-            console.log(response.data.blogs)
-            setBlogs(response.data.blogs)
+            console.log(response.data.blog)
+            setBlog(response.data.blog)
             setLoading(false);
         })
-    },[])
+    },[id])
 
-    return {loading,blogs}
+    return {loading,blog}
 }

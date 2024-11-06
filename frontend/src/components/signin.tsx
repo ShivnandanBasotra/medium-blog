@@ -3,7 +3,7 @@ import authAtom from "../atoms/auth";
 import {AuthSchema} from "@shiv.100xdevs/medium-common";
 import { useState } from "react";
 import axios from "axios";
-import {backendUrl} from "../../config"
+import { backendUrl } from "../../config";
 import user from "../atoms/user";
 
 export default function SigninPage() {
@@ -13,21 +13,6 @@ export default function SigninPage() {
     password: '',
   })
   const setUser = useSetRecoilState(user);
-  // async function handleSignin (e: React.MouseEvent<HTMLButtonElement>){
-  //   e.preventDefault();
-  //    try {
-  //     const response = await axios.post(`${backendUrl}/api/v1/user/signin`,authInputs);
-  //     localStorage.setItem('user', JSON.stringify(response.data.user));
-  //     setUser(response.data.user);
-  //    } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.log('Error:', error.response?.data || error.message);
-  //     } else {
-  //       console.log('An unexpected error occurred:', error);
-  //     }
-  //    }
-  // }
-
   async function handleSignin (e: React.MouseEvent<HTMLButtonElement>){
     e.preventDefault();
      try {
@@ -35,6 +20,8 @@ export default function SigninPage() {
         withCredentials: true
       });
       localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('jwt', response.data.jwt);
+      console.log(response.data.user)
       setUser(response.data.user);
      } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -60,7 +47,7 @@ export default function SigninPage() {
                 id="email"
                 type="email"
                 value={authInputs.email}
-                onChange={(e)=>{setAuthInputs(prev=>({...prev,email:e.target.value}))}}
+                onChange={(e)=>{setAuthInputs((prev: AuthSchema)=>({...prev,email:e.target.value}))}}
                 placeholder="Enter your email"
                 required
                 className="block w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-2 focus:border-black"
@@ -72,7 +59,7 @@ export default function SigninPage() {
                 id="password"
                 type="password"
                 value={authInputs.password}
-                onChange={(e)=>{setAuthInputs(prev=>({...prev,password:e.target.value}))}}
+                onChange={(e) => { setAuthInputs((prev: AuthSchema) => ({ ...prev, password: e.target.value })) }}
                 placeholder="Enter your password"
                 required
                 className="block w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-2 focus:border-black"

@@ -19,15 +19,16 @@ export const blogRouter = new Hono<{
 }>();
 
 blogRouter.use(async (c, next) => {
-    const jwt = getCookie(c, "jwt");
+    let jwt = c.req.header('Authorization');
     try {
         if (!jwt) return c.json({ error: "Unauthorized access: missing token" }, 403);
+        jwt = jwt.split(' ')[1];
         const user = await verify(jwt, c.env.JWT_SECRET) as JwtPayload;
         if (!user) return c.json({ error: "unauthorized access" }, 403);
         c.set("userId", user.id);
         await next()
-    } catch (error) {
-        return c.json({ error: "unauthorized access" }, 403);
+    } catch (error2) {
+        return c.json({ error: "unauthorized access",error2, jwt}, 403);
     }
 })
 
@@ -129,7 +130,8 @@ blogRouter.get('/bulk', async (c) => {
 })
 
 blogRouter.get('/blog/:id', async (c) => {
-    const id = c.req.query('id');
+    const id = c.req.param('id');
+    // const id = "7e9d1d6a-b458-4e6d-8f03-e62d22324a82";
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
@@ -150,7 +152,7 @@ blogRouter.get('/blog/:id', async (c) => {
             }
         })
         return c.json({
-            blog
+            blog,
         })
     } catch (error) {
         console.log(error);

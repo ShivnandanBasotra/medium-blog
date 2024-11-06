@@ -10,11 +10,8 @@ app.use('/*', cors({
     credentials: true,
     origin: "http://localhost:5173"
 }))
+
 app.route('/api/v1/user',userRouter)
 app.route('/api/v1/blog',blogRouter)
-
-
-
-
 
 export default app
